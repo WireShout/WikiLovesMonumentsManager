@@ -31,17 +31,36 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#"><?php echo $option['title']; ?></a>
+          <a class="brand" href="index.php"><?php echo $option['title']; ?></a>
           <div class="nav-collapse">
             <ul class="nav">
               <li><a href="index.php">Home</a></li>
               <li><a href="submit.php">Submit</a></li>
               <li><a href="vote.php">Vote</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
+            <?php if($option['debug'] == 'TRUE') { ?><ul class="nav pull-right">
+            	<li class="dropdown open">
+              	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Session <b class="caret"></b></a>
+              	<ul class="dropdown-menu">
+                	<li><a>ID: <?php echo session_id(); ?></a></li>
+                	<li class="divider"></li>
+                	<li><a href="_global/clear.php">New Session...</a></li>
+              	</ul><?php } ?>
+            </li>
+          </ul>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="container">
+    	<?php if($option['debug'] == 'TRUE') { ?><div class="alert alert-info">
+    		<b>Debug Mode is ENABLED. Please disable this before going live.</b><br>
+			<ul>
+				<li>Connection IP: <?php echo $_SERVER['REMOTE_ADDR']; ?></li>
+				<li>Connection User-Agent: <?php echo $_SERVER['HTTP_USER_AGENT']; ?></li>
+				<li>Request: <?php echo $_SERVER['REQUEST_URI']; ?></li>
+				<li>GET Values : <?php echo $_SERVER['QUERY_STRING']; ?></li>
+			</ul>
+		</div><?php } ?>
     
