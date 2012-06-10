@@ -4,33 +4,40 @@
 	$_SESSION['pagetitle'] = 'Submit';
 	$_SESSION['postverify'] = '';
 	require_once('_global/createPage.php');
+	require_once('_global/recaptchalib.php');
+	require_once('_global/post.php');
 ?>
 
       <h1><?php echo $_SESSION['pagetitle']; ?></h1>
-      
+      <?php echo submittedArt($privatekey); ?>
       <!-- EDIT THIS PART TO YOUR HEARTS CONTENT -->
       <p>Ready to submit your artwork? Fill out this form.</p>
       <!-- STOP EDITING HERE -->
-      <form class="form-horizontal" action="_global/post.php" method="POST">
+      <form class="form-horizontal" action="submit.php" method="POST">
         <fieldset>
+          <div class="control-group">
+            <div class="controls">
+              <input type="hidden" id="unique" value="<?php echo session_id(); ?>" name="secID">
+            </div>
+          </div>
           <div class="control-group">
             <label class="control-label" for="userName">Your Name</label>
             <div class="controls">
-              <input type="text" class="input-xlarge" id="userName" name="submitter">
+              <input type="text" class="input-xlarge" id="userName" <?php if(isset($_SESSION['userNAME'])) { ?> value="<?php echo $_SESSION['userNAME']; ?>"<?php } ?> name="submitter">
               <p class="help-block">Enter your name, first and last please.</p>
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="userMail">Your E-Mail</label>
             <div class="controls">
-              <input type="text" class="input-xlarge" id="userMail" name="email">
+              <input type="text" class="input-xlarge" id="userMail" <?php if(isset($_SESSION['userMAIL'])) { ?> value="<?php echo $_SESSION['userMAIL']; ?>"<?php } ?> name="email">
               <p class="help-block">Your e-mail address. This is used for general communications.</p>
             </div>
           </div>
           <div class="control-group">
             <label class="control-label" for="userWCName">WikiMedia Commons Username</label>
             <div class="controls">
-              <input type="text" class="input-xlarge" id="userWCName" name="wcomname">
+              <input type="text" class="input-xlarge" id="userWCName" <?php if(isset($_SESSION['userCOMMONS'])) { ?> value="<?php echo $_SESSION['userCOMMONS']; ?>"<?php } ?> name="wcomname">
               <p class="help-block">Your wikimedia commons username. Could also be your Wikipedia username.</p>
             </div>
           </div>
@@ -58,8 +65,26 @@
               </label>
             </div>
           </div>
+          
+          <div id="verify" class="modal hide fade" style="display: none; ">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">×</button>
+              <h3>Submit | <?php echo $option['title']; ?></h3>
+            </div>
+            <div class="modal-body">
+              <h4>CAPTCHA</h4>
+              
+              <?php echo recaptcha_get_html($publickey); ?>
+              
+            </div>
+            <div class="modal-footer">
+              <a href="#" class="btn" data-dismiss="modal">Close</a>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+          
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Submit</button>
+          	<a data-toggle="modal" href="#verify" class="btn btn-primary btn-large">Submit</a>
           </div>
         </fieldset>
       </form>
